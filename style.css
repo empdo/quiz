@@ -1,75 +1,99 @@
-body, html {
-    height: 100%;
+body,
+html {
+  height: 100%;
 }
 
 body {
+  --border_shadow_color: violet;
 
-    --border_shadow_color: violet;
+  background-color: #020014;
+  margin: 0;
 
-    background-color: #020014;
-    display: grid;
-    margin: 0;
+  display: grid;
+  grid-template-columns: [left]100px [middle] auto [right] 100px;
+  grid-template-rows: [top]100px [middle] auto [bottom] 100px;
 
-    align-items: center;
-    justify-items: center;
 }
 
 .shake_animation {
-    --border_shadow_color: #790f0f;
-    animation: shake_animation 1s linear 0s 1 forwards;
+  --border_shadow_color: #790f0f;
+  animation: shake_animation 1s linear 0s 1 forwards;
 }
 
-@keyframes shake_animation{
-    0%{transform: rotate(10deg);}
-    5%{transform: rotate(-10deg);}
-    10%{transform: rotate(5deg);}
-    15%{transform: rotate(-5deg);}
-    20%{transform: rotate(0deg);}
-    100%{}
+@keyframes shake_animation {
+  0% {
+    transform: rotate(10deg);
+  }
+  5% {
+    transform: rotate(-10deg);
+  }
+  10% {
+    transform: rotate(5deg);
+  }
+  15% {
+    transform: rotate(-5deg);
+  }
+  20% {
+    transform: rotate(0deg);
+  }
+  100% {
+  }
+}
+
+.options-icon {
+    grid-column: right;
+    grid-row: top;
+    align-self: center;
+    justify-self: center;
+
 }
 
 .container {
-    height: 300px;
-    width: 300px;
+  height: 300px;
+  width: 300px;
 
-    border-radius: 10px;
-    background-color: #020014;
-    border: 3px solid var(--border_shadow_color);
-    box-shadow: 0px 2px 20px 0px var(--border_shadow_color) inset, 0px 2px 20px 0px var(--border_shadow_color);
+  border-radius: 10px;
+  background-color: #020014;
+  border: 3px solid var(--border_shadow_color);
+  box-shadow: 0px 2px 20px 0px var(--border_shadow_color) inset,
+    0px 2px 20px 0px var(--border_shadow_color);
 
-    display: grid;
-    grid-template-columns: auto auto;
-    grid-template-rows: 60% 40%;
-    grid-template-areas: "top top" 
+  grid-row: middle;
+  grid-column: middle;
+  align-self: center;
+  justify-self: center;
+
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: 60% 40%;
+  grid-template-areas:
+    "top top"
     "bottom_l bottom_r";
-
-    /* gap: 5px; */
-
 }
 
-.question{
-    font-size: 1em;
-    color: white;
-    text-align: center;
+.question {
+  font-size: 1em;
+  color: white;
+  text-align: center;
 
-    grid-area: top;
-    margin: 0px 20px;
-    align-self: center;
-    justify-self: center;
+  grid-area: top;
+  margin: 0px 20px;
+  align-self: center;
+  justify-self: center;
 }
 
 .answer_button {
-    margin: 5px;
-    border-radius: 10px;
-    border: 0px;
-    background-color: #00000000;
-    color: #46daff;
-    text-shadow: 0px 0px 10px #46daff;
+  margin: 5px;
+  border-radius: 10px;
+  border: 0px;
+  background-color: #00000000;
+  color: #46daff;
+  text-shadow: 0px 0px 10px #46daff;
 }
 
 .answer_button #true_button {
-    grid-area: "bottom_l";
+  grid-area: "bottom_l";
 }
 .answer_button #false_button {
-    grid-area: "bottom_r"
+  grid-area: "bottom_r";
 }
