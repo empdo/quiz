@@ -12,7 +12,6 @@ body {
   display: grid;
   grid-template-columns: [left]100px [middle] auto [right] 100px;
   grid-template-rows: [top]100px [middle] auto [bottom] 100px;
-
 }
 
 .shake_animation {
@@ -40,12 +39,30 @@ body {
   }
 }
 
-.options-icon {
-    grid-column: right;
-    grid-row: top;
-    align-self: center;
-    justify-self: center;
+.options-content {
+  position: relative;
+  display: inline-block;
 
+  grid-column: right;
+  grid-row: top;
+}
+
+.options-icon{
+  filter: drop-shadow(0px 0px 5px var(--border_shadow_color));
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px #00000033;
+  padding: 12px 1px;
+  z-index: 1;
+}
+
+.options-content:hover .dropdown-content {
+  display: block;
 }
 
 .container {
@@ -62,6 +79,7 @@ body {
   grid-column: middle;
   align-self: center;
   justify-self: center;
+  padding: 20px;
 
   display: grid;
   grid-template-columns: auto auto;
@@ -72,12 +90,12 @@ body {
 }
 
 .question {
-  font-size: 1em;
+  font-size: 25px;
   color: white;
   text-align: center;
 
   grid-area: top;
-  margin: 0px 20px;
+  margin: 0px;
   align-self: center;
   justify-self: center;
 }
@@ -89,6 +107,7 @@ body {
   background-color: #00000000;
   color: #46daff;
   text-shadow: 0px 0px 10px #46daff;
+  font-size: 26px;
 }
 
 .answer_button #true_button {
