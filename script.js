@@ -83,4 +83,21 @@ getToken().then((data) => {
       item.addEventListener("click", button_pressed);
     });
   });
+
 });
+
+function openNav() {
+    document.getElementById("mySidenav").style.width = "250px";
+    document.querySelector(".container").style.marginLeft = "250px";
+    document.querySelector(".options-icon").style.display = "none";
+    document.body.style.setProperty("--border_shadow_color_sideNav", "violet");
+}
+
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0"; 
+    document.querySelector(".container").style.marginLeft = "0px";
+    setTimeout(() => {
+        document.querySelector(".options-icon").style.display = "block";
+        document.body.style.setProperty("--border_shadow_color_sideNav", "transparent");
+    }, 230);
+} 

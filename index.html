@@ -1,16 +1,23 @@
-<!DOCTYPE html>
+<!DOCTYPE htmlt>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700&display=swap" rel="stylesheet"> 
     <link rel="stylesheet" href="style.css" />
     <title>Document</title>
   </head>
 
   <body>
-    <div class="options-content">
+    <div id="mySidenav" class="sideNav"> 
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+          <a href="#">About</a>
+          <a href="#">Services</a>
+          <a href="#">Clients</a>
+          <a href="#">Contact</a>
+    </div>
+    <div class="options-icon" onclick="openNav()">
       <svg
-        class="options-icon"
         xmlns="http://www.w3.org/2000/svg"
         enable-background="new 0 0 24 24"
         viewBox="0 0 24 24"
@@ -25,13 +32,10 @@
           />
         </g>
       </svg>
-      <div class="dropdown-content">
-        <p>hello world</p>
-      </div>
     </div>
 
     <div class="container">
-      <h1 class="question"></h1>
+         <h1 class="question"> </h1>
       <button class="answer_button" id="true_button">true</button>
       <button class="answer_button" id="false_button">false</button>
     </div>
