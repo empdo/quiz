@@ -3,8 +3,8 @@ var category = 9;
 var questions;
 var token;
 
-async function getToken() {
-  if (sessionStorage.triviaToken){
+async function getToken(newToken) {
+  if (sessionStorage.triviaToken && !newToken){
     return sessionStorage.triviaToken;
   }
   const tokenUrl = "https://opentdb.com/api_token.php?command=request";
@@ -37,14 +37,23 @@ async function getQuestions() {
   const questionRespons = await fetch(questionUrl.href);
   const questionJson = await questionRespons.json();
 
-  amountOfQuestions = questionJson.results.length;
+  if (questionJson.response_code == 0){
+    amountOfQuestions = questionJson.results.length;
 
-  for (i = 0; i < amountOfQuestions; i++) {
-    list.push({
-      question: questionJson.results[i].question,
-      answer: questionJson.results[i].correct_answer,
-    });
+    for (i = 0; i < amountOfQuestions; i++) {
+      list.push({
+        question: questionJson.results[i].question,
+        answer: questionJson.results[i].correct_answer,
+      });
+    }
+  }else if (questionJson.response_code == 4){
+    getToken(true).then((data) => {
+      token = data;
+    })
+    return await getQuestions();
   }
+
+
   return list;
 }
 
@@ -52,7 +61,7 @@ function appendQuestions() {
   currentQuestion = 0;
   console.log(currentQuestion);
 
-  getToken().then((data) => {
+  getToken(false).then((data) => {
     token = data;
     //borde set token to lokal storage
 
