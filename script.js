@@ -1,13 +1,26 @@
 var currentQuestion = -1;
+var category = 9;
 var questions;
 var token;
 
 async function getToken() {
+  if (sessionStorage.triviaToken){
+    return sessionStorage.triviaToken;
+  }
   const tokenUrl = "https://opentdb.com/api_token.php?command=request";
   const tokenRespons = await fetch(tokenUrl);
   const tokenJson = await tokenRespons.json();
+  sessionStorage.triviaToken = tokenJson.token;
 
   return tokenJson.token;
+}
+
+async function getCategories() {
+  const categorysUrl = "https://opentdb.com/api_category.php";
+  const categorysRespons = await fetch(categorysUrl);
+  const categoryJson = await categorysRespons.json();
+
+  return categoryJson;
 }
 
 async function getQuestions() {
@@ -16,7 +29,7 @@ async function getQuestions() {
 
   const questionUrl = new URL("https://opentdb.com/api.php");
   questionUrl.searchParams.append("amount", "10");
-  questionUrl.searchParams.append("category", "9");
+  questionUrl.searchParams.append("category", category);
   questionUrl.searchParams.append("difficulty", "medium");
   questionUrl.searchParams.append("type", "boolean");
   questionUrl.searchParams.append("token", token);
@@ -35,69 +48,102 @@ async function getQuestions() {
   return list;
 }
 
-getToken().then((data) => {
-  token = data;
-  //borde set token to lokal storage
+function appendQuestions() {
+  currentQuestion = 0;
+  console.log(currentQuestion);
 
-  getQuestions().then((data) => {
-    updateQuestion();
+  getToken().then((data) => {
+    token = data;
+    //borde set token to lokal storage
 
-    function updateQuestion() {
-      currentQuestion++
-      console.log(currentQuestion)
+    getQuestions().then((data) => {
+      updateQuestion();
 
-      if (currentQuestion != (data.length)) {
-        document.querySelector(".question").innerHTML = data[currentQuestion].question;
-      }else{
-        currentQuestion = -1;
-        document.querySelector(".question").innerHTML = data[currentQuestion].question;
-      };
-      
-    }
+      function updateQuestion() {
+        currentQuestion++;
+        console.log(currentQuestion);
 
-    function button_pressed() {
-      console.log(this.id);
-      console.log(data);
-
-      if (
-        data[currentQuestion].answer !=
-        (this.id === "true_button" ? "True" : "False")
-      ) {
-        document.querySelector(".container").classList.add("shake_animation");
-        setTimeout(() => {
-          document
-            .querySelector(".container")
-            .classList.remove("shake_animation");
-        }, 1000);
-      } else {
-        document.body.style.setProperty("--border_shadow_color", "#1d7407");
-        setTimeout(() => {
-          document.body.style.setProperty("--border_shadow_color", "violet");
-        }, 300);
+        if (currentQuestion != data.length) {
+          document.querySelector(".question").innerHTML =
+            data[currentQuestion].question;
+          setTextSize(currentQuestion, data);
+        } else {
+          console.log("dö");
+        }
       }
 
-      updateQuestion();
-    }
+      function button_pressed() {
+        console.log(this.id);
+        console.log(data);
 
-    document.querySelectorAll(".answer_button").forEach((item) => {
-      item.addEventListener("click", button_pressed);
+        if (
+          data[currentQuestion].answer !=
+          (this.id === "true_button" ? "True" : "False")
+        ) {
+          document.querySelector(".container").classList.add("shake_animation");
+          setTimeout(() => {
+            document
+              .querySelector(".container")
+              .classList.remove("shake_animation");
+          }, 1000);
+        } else {
+          document.body.style.setProperty("--border_shadow_color", "#1d7407");
+          setTimeout(() => {
+            document.body.style.setProperty("--border_shadow_color", "violet");
+          }, 300);
+        }
+
+        updateQuestion();
+      }
+
+      document.querySelectorAll(".answer_button").forEach((item) => {
+        item.addEventListener("click", button_pressed);
+      });
     });
   });
+}
 
-});
+function setTextSize(currentQuestion, data) {
+  document.querySelector(".question").style.fontSize = (
+    (53 / data[currentQuestion].question.length) *
+    25
+  ).toString();
+}
+
+function appendCategories() {
+  getCategories().then((data) => {
+    console.log(data.trivia_categories.length);
+    for (i = 0; i < data.trivia_categories.length - 1; i++) {
+      var listItem = document.createElement("li");
+      listItem.setAttribute("id", data.trivia_categories[i].id);
+      listItem.onclick = function () {
+        category = this.id;
+        appendQuestions();
+      };
+      listItem.innerHTML = data.trivia_categories[i].name;
+      document.querySelector(".dropdown-content").appendChild(listItem);
+    }
+  });
+}
 
 function openNav() {
-    document.getElementById("mySidenav").style.width = "250px";
-    document.querySelector(".container").style.marginLeft = "250px";
-    document.querySelector(".options-icon").style.display = "none";
-    document.body.style.setProperty("--border_shadow_color_sideNav", "violet");
+  document.getElementById("mySidenav").style.width = "250px";
+  document.querySelector(".container").style.marginLeft = "250px";
+  document.querySelector(".options-icon").style.display = "none";
+  document.body.style.setProperty("--border_shadow_color_sideNav", "violet");
 }
 
 function closeNav() {
-    document.getElementById("mySidenav").style.width = "0"; 
-    document.querySelector(".container").style.marginLeft = "0px";
-    setTimeout(() => {
-        document.querySelector(".options-icon").style.display = "block";
-        document.body.style.setProperty("--border_shadow_color_sideNav", "transparent");
-    }, 230);
-} 
+  document.getElementById("mySidenav").style.width = "0";
+  document.querySelector(".container").style.marginLeft = "0px";
+  setTimeout(() => {
+    document.querySelector(".options-icon").style.display = "block";
+    document.body.style.setProperty(
+      "--border_shadow_color_sideNav",
+      "transparent"
+    );
+  }, 230);
+}
+
+appendCategories();
+appendQuestions();
